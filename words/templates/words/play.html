@@ -1,0 +1,15 @@
+{% extends 'words/base.html' %}{% block content %}
+<div class="mx-auto" style="max-width:620px"><div class="card p-4">
+{% if empty %}<h5>Nothing to practice here</h5><p class="text-muted">{% if due %}No words are due right now. Come back later.{% else %}Add more words{% if mode == 'fill' %} with example sentences that contain the word{% endif %} to use this mode.{% endif %}</p><a class="btn btn-vv" href="{% url 'zone' %}">Back</a>
+{% elif result %}
+<h4 class="{% if ok %}text-success{% else %}text-danger{% endif %}">{% if ok %}Correct!{% else %}Not quite{% endif %}</h4>
+<p><b>{{ w.word }}</b>: {{ w.meaning }}</p>{% if w.hindi_meaning %}<p>{{ w.hindi_meaning }}</p>{% endif %}{% if w.example %}<p><em>{{ w.example }}</em></p>{% endif %}
+<p class="text-muted">Next review: {{ w.next_review }}</p>
+<a class="btn btn-vv" href="{% url 'play' %}?mode={{ mode }}{% if due %}&due=1{% endif %}">Next question</a>
+{% else %}
+<form method="post">{% csrf_token %}<input type="hidden" name="wid" value="{{ w.pk }}"><input type="hidden" name="mode" value="{{ mode }}">{% if due %}<input type="hidden" name="due" value="1">{% endif %}
+{% if mode == 'mcq' %}<h4>What does "{{ w.word }}" mean?</h4>{% for o in options %}<div class="form-check my-2"><input class="form-check-input" type="radio" name="answer" value="{{ o }}" id="o{{ forloop.counter }}" required><label class="form-check-label" for="o{{ forloop.counter }}">{{ o }}</label></div>{% endfor %}
+{% elif mode == 'fill' %}<h4>{{ blank }}</h4><input name="answer" class="form-control my-3" placeholder="Type the missing word" required autofocus>
+{% elif mode == 'w2m' %}<h4>{{ w.word }}</h4><input name="answer" class="form-control my-3" placeholder="Type the meaning" required autofocus>
+{% else %}<h4>{{ w.meaning }}</h4><input name="answer" class="form-control my-3" placeholder="Type the word" required autofocus>{% endif %}
+<button class="btn btn-vv">Check answer</button></form>{% endif %}</div></div>{% endblock %}

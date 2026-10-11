@@ -1,0 +1,16 @@
+{% extends 'words/base.html' %}{% block content %}
+<h3 class="mb-3">Progress &amp; Stats</h3><div class="row g-3 mb-3">
+<div class="col-6 col-lg-3"><div class="card p-3"><div class="big">{{ s.total }}</div>Words learned</div></div>
+<div class="col-6 col-lg-3"><div class="card p-3"><div class="big">{{ s.mastered }}</div>Words mastered</div></div>
+<div class="col-6 col-lg-3"><div class="card p-3"><div class="big">{{ s.need }}</div>Need practice</div></div>
+<div class="col-6 col-lg-3"><div class="card p-3"><div class="big">{{ s.weak }}</div>Weak words</div></div>
+<div class="col-6 col-lg-3"><div class="card p-3"><div class="big">{{ s.streak }}</div>Current streak (days)</div></div>
+<div class="col-6 col-lg-3"><div class="card p-3"><div class="big">{{ week_total }}</div>This week</div></div>
+<div class="col-6 col-lg-3"><div class="card p-3"><div class="big">{{ s.accuracy }}%</div>Accuracy</div></div></div>
+<div class="row g-3"><div class="col-md-6"><div class="card p-3"><h6>Questions practiced per day</h6><canvas id="c1"></canvas></div></div>
+<div class="col-md-6"><div class="card p-3"><h6>Accuracy per day</h6><canvas id="c2"></canvas></div></div></div>
+<div class="card p-3 mt-3"><h6>Weak words</h6>{% for w in weak_words %}<span class="bd b-in me-1">{{ w.word }}</span>{% empty %}<span class="text-muted">None yet.</span>{% endfor %}</div>{% endblock %}
+{% block js %}<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script><script>
+new Chart(c1,{type:'bar',data:{labels:{{ labels|safe }},datasets:[{data:{{ counts|safe }},backgroundColor:'#1f5c3f',borderRadius:6}]},options:{plugins:{legend:{display:false}}}});
+new Chart(c2,{type:'line',data:{labels:{{ labels|safe }},datasets:[{data:{{ accs|safe }},borderColor:'#7a5af8',tension:.35}]},options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:100}}}});
+</script>{% endblock %}

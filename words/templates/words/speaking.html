@@ -1,0 +1,20 @@
+{% extends 'words/base.html' %}{% block content %}
+<h3 class="mb-3">Speaking Practice</h3>
+{% if not w %}<div class="card p-4">Add a word with an example sentence to start. <a href="{% url 'add_word' %}">Add a word</a></div>{% else %}
+<div class="card p-4" style="max-width:720px"><p class="text-muted mb-1">Say this sentence (word: <b>{{ w.word }}</b>)</p>
+<h4 id="s"></h4><div class="d-flex gap-2 my-3"><button class="btn btn-outline-success" id="hear"><i class="bi bi-volume-up"></i> Hear it</button>
+<button class="btn btn-vv" id="rec"><i class="bi bi-mic"></i> Start speaking</button><a class="btn btn-outline-secondary" href="{% url 'speaking' %}">New sentence</a></div>
+<div id="heard" class="text-muted"></div><div id="res" class="mt-3"></div></div>{% endif %}{% endblock %}
+{% block js %}{% if w %}<script>
+const T={{ sentence|safe }}; s.textContent=T;
+const norm=x=>(x.toLowerCase().match(/[a-z']+/g)||[]);
+hear.onclick=()=>{const u=new SpeechSynthesisUtterance(T);u.lang='en-US';speechSynthesis.speak(u)};
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(!SR){res.innerHTML='<span class="text-danger">Speech recognition is not supported in this browser. Use Chrome or Edge.</span>';rec.disabled=true}
+else rec.onclick=()=>{const r=new SR();r.lang='en-US';r.onstart=()=>heard.textContent='Listening...';
+ r.onerror=e=>heard.textContent='Error: '+e.error;
+ r.onresult=e=>{const said=e.results[0][0].transcript;heard.textContent='You said: "'+said+'"';
+  const a=norm(T),b=new Set(norm(said));const n=a.filter(x=>b.has(x)).length;const p=Math.round(n*100/a.length);
+  const lab=p>=90?'Good':p>=60?'Fair':'Needs work';
+  res.innerHTML=`<div>Pronunciation: <b>${lab}</b></div><div>Words detected: <b>${n}/${a.length}</b></div><div>Fluency: <b>${p}%</b></div>`};r.start()};
+</script>{% endif %}{% endblock %}

@@ -1,0 +1,4 @@
+{% extends 'words/base.html' %}{% block content %}
+<h3 class="mb-3">Settings</h3><div class="card p-4" style="max-width:420px"><form method="post">{% csrf_token %}
+<label class="form-label">Daily goal (practice answers per day)</label><input type="number" min="1" max="200" name="daily_goal" value="{{ p.daily_goal }}" class="form-control mb-3">
+<button class="btn btn-vv">Save settings</button></form></div>{% endblock %}

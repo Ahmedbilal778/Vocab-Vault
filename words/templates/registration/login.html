@@ -1,0 +1,8 @@
+{% extends 'words/base.html' %}{% block content_anon %}
+<div class="mx-auto card p-4" style="max-width:380px"><h4 class="mb-3">Sign in to VocabVault</h4>
+<form method="post">{% csrf_token %}
+{% for f in form %}<div class="mb-3"><label class="form-label">{{ f.label }}</label>{{ f }}</div>{% endfor %}
+{% if form.errors %}<p class="text-danger small">Wrong username or password.</p>{% endif %}
+<button class="btn btn-vv w-100">Sign in</button></form></div>
+<script>document.querySelectorAll('input').forEach(i=>{if(i.type!='hidden')i.classList.add('form-control')})</script>
+{% endblock %}

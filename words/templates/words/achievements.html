@@ -1,0 +1,5 @@
+{% extends 'words/base.html' %}{% block content %}
+<h3 class="mb-3">Achievements</h3><div class="row g-3">
+{% for t,d,i,ok in defs %}<div class="col-6 col-lg-4"><div class="card p-3 h-100" style="{% if not ok %}opacity:.45{% endif %}">
+<i class="bi {{ i }}" style="font-size:2rem;color:{% if ok %}var(--go){% else %}#999{% endif %}"></i><b>{{ t }}</b><span class="text-muted small">{{ d }}</span>
+<span class="bd {% if ok %}b-mastered{% else %}b-new{% endif %} align-self-start mt-1">{% if ok %}Earned{% else %}Locked{% endif %}</span></div></div>{% endfor %}</div>{% endblock %}

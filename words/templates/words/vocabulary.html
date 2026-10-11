@@ -1,0 +1,10 @@
+{% extends 'words/base.html' %}{% block content %}
+<div class="d-flex justify-content-between mb-3 flex-wrap gap-2"><h3>My Vocabulary</h3>
+<form class="d-flex gap-2"><input name="q" value="{{ q }}" class="form-control" placeholder="Search words"><button class="btn btn-vv">Search</button></form></div>
+<div class="card p-3 table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Word</th><th>Meaning</th><th>Hindi</th><th>Level</th><th>Status</th><th>Next review</th><th></th></tr></thead><tbody>
+{% for w in words %}<tr><td><b>{{ w.word }}</b><br><small class="text-muted">{{ w.part_of_speech }} {{ w.pronunciation }}</small></td>
+<td>{{ w.meaning }}<br><small class="text-muted">{{ w.example }}</small>{% if w.synonyms %}<br><small>Syn: {{ w.synonyms }}</small>{% endif %}{% if w.antonyms %}<br><small>Ant: {{ w.antonyms }}</small>{% endif %}</td>
+<td>{{ w.hindi_meaning }}</td><td>{{ w.get_difficulty_display }}</td>
+<td><span class="bd {% if w.status == 'New' %}b-new{% elif w.status == 'Mastered' %}b-mastered{% else %}b-in{% endif %}">{{ w.status }}</span></td><td>{{ w.next_review }}</td>
+<td><form method="post" action="{% url 'delete_word' w.pk %}" onsubmit="return confirm('Delete this word?')">{% csrf_token %}<button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button></form></td></tr>
+{% empty %}<tr><td colspan="7" class="text-muted">No words yet. <a href="{% url 'add_word' %}">Add a word</a>.</td></tr>{% endfor %}</tbody></table></div>{% endblock %}

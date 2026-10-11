@@ -1,0 +1,5 @@
+{% extends 'words/base.html' %}{% block content %}
+<h3 class="mb-1">{% if due %}Smart Revision{% else %}Practice Zone{% endif %}</h3>
+{% if due %}<p class="text-muted">{{ due_count }} word{{ due_count|pluralize }} due for review. Wrong answers return tomorrow; correct ones come back after 3, 7, 14 and 30 days.</p>{% endif %}
+<div class="row g-3 mt-1">{% for key,name,desc in modes %}<div class="col-md-6 col-lg-3"><div class="card p-3 h-100"><h5>{{ name }}</h5><p class="text-muted">{{ desc }}</p>
+<a class="btn btn-vv mt-auto" href="{% url 'play' %}?mode={{ key }}{% if due %}&due=1{% endif %}">Start</a></div></div>{% endfor %}</div>{% endblock %}
